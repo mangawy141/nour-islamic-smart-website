@@ -59,6 +59,7 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [quizTopic, setQuizTopic] = useState(null);
+  const [visibleTimelineEvents, setVisibleTimelineEvents] = useState([]);
 
   // Apply theme
   useEffect(() => {
@@ -115,7 +116,12 @@ export default function App() {
         }}
       />
     ) : null,
-    timeline: <Timeline />,
+    timeline: (
+      <Timeline
+        setCurrentPage={setCurrentPage}
+        onVisibleEventsChange={setVisibleTimelineEvents}
+      />
+    ),
     quiz: (
       <Quiz
         topic={quizTopic}
@@ -166,7 +172,7 @@ export default function App() {
           )}
 
           {/* Page content */}
-          <div className="pt-20 pb-20">
+          <div className="pt-20 ">
             {pages[currentPage] || (
               <HomePage
                 setCurrentPage={setCurrentPage}
@@ -189,6 +195,7 @@ export default function App() {
             chatHistory={chatHistory}
             setChatHistory={setChatHistory}
             onMessage={() => showToast("تم إرسال رسالتك ✓")}
+            visibleTimelineEvents={visibleTimelineEvents}
           />
         )}
 

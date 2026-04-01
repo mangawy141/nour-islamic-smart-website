@@ -2,6 +2,7 @@
   "name": "noor-islamic-education",
   "version": "1.0.0",
   "description": "Advanced Islamic Educational Platform with AI Virtual Assistant",
+  "type": "module",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

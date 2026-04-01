@@ -15,6 +15,7 @@ out/
 *.config.local.js
 .env.local
 .env.*.local
+.env
 
 # IDE and Editor
 .vscode/

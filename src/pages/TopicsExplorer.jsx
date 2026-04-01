@@ -69,7 +69,10 @@ export default function TopicsExplorer({ setSelectedTopic, setCurrentPage }) {
       </div>
 
       {/* Topics Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div
+        className="grid md:grid-cols-2 gap-6 animate-slideUp"
+        style={{ animationDelay: "0.2s" }}
+      >
         {filteredTopics.length > 0 ? (
           filteredTopics.map((topic) => (
             <TopicCard

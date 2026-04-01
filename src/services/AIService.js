@@ -43,21 +43,55 @@ const MOCK_RESPONSES = {
   ],
 };
 
+// Request throttling to prevent 429 errors
+let lastRequestTime = 0;
+const MIN_REQUEST_INTERVAL = 2000; // Minimum 2 seconds between requests
+let retryCount = 0;
+const MAX_RETRIES = 3;
+
 /**
- * Get AI response
+ * Get AI response with throttling and retry logic
  * @param {string} userMessage - User message
  * @param {Array} conversationHistory - Previous messages
  * @returns {Promise<string>} - AI response
  */
 export async function getAIResponse(userMessage, conversationHistory = []) {
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  // Get API key from environment
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   // If no API key, return mock response
   if (!apiKey) {
+    console.log(
+      "ℹ️ Using mock responses. To enable real AI: Set VITE_OPENAI_API_KEY in .env",
+    );
     return getMockResponse(userMessage);
   }
 
+  // Throttle requests to prevent rate limiting
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastRequestTime;
+
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
+    console.log(`⏱️ Throttling request. Waiting ${waitTime}ms...`);
+    await new Promise((resolve) => setTimeout(resolve, waitTime));
+  }
+
+  return makeAPIRequest(userMessage, conversationHistory, apiKey, 0);
+}
+
+/**
+ * Make API request with retry logic
+ */
+async function makeAPIRequest(
+  userMessage,
+  conversationHistory,
+  apiKey,
+  attemptNumber,
+) {
   try {
+    lastRequestTime = Date.now();
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -85,15 +119,36 @@ export async function getAIResponse(userMessage, conversationHistory = []) {
       }),
     });
 
+    // Handle rate limiting with exponential backoff
+    if (response.status === 429) {
+      if (attemptNumber < MAX_RETRIES) {
+        const backoffTime = Math.pow(2, attemptNumber) * 1000; // 1s, 2s, 4s
+        console.warn(
+          `⚠️ Rate limited (429). Retrying in ${backoffTime}ms (Attempt ${attemptNumber + 1}/${MAX_RETRIES})`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, backoffTime));
+        return makeAPIRequest(
+          userMessage,
+          conversationHistory,
+          apiKey,
+          attemptNumber + 1,
+        );
+      } else {
+        console.error("❌ Max retries exceeded. Using mock response.");
+        return getMockResponse(userMessage);
+      }
+    }
+
     if (!response.ok) {
-      console.error("API Error:", response.status);
+      console.error("❌ API Error:", response.status, response.statusText);
       return getMockResponse(userMessage);
     }
 
     const data = await response.json();
+    console.log("✅ API request successful");
     return data.choices[0].message.content;
   } catch (error) {
-    console.error("Error calling OpenAI API:", error);
+    console.error("❌ Error calling OpenAI API:", error);
     return getMockResponse(userMessage);
   }
 }

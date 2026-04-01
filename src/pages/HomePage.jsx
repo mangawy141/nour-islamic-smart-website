@@ -144,26 +144,34 @@ export default function HomePage({ setCurrentPage, setShowChat }) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary-600 to-secondary-600">
+      <section className="py-16 px-4 bg-gradient-to-r from-primary-600 to-secondary-600 animate-fadeIn">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-4xl font-bold mb-6">هل أنت مستعد للتعلم؟</h2>
-          <p className="text-lg mb-8 opacity-90">
+          <h2 className="text-4xl font-bold mb-6 animate-slideUp">
+            هل أنت مستعد للتعلم؟
+          </h2>
+          <p
+            className="text-lg mb-8 font-medium animate-slideUp"
+            style={{ animationDelay: "0.1s" }}
+          >
             ابدأ رحلتك التعليمية الآن واكتشف عظمة السيرة النبوية
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center animate-slideUp"
+            style={{ animationDelay: "0.2s" }}
+          >
             <Button
               variant="primary"
               size="lg"
               onClick={() => setCurrentPage("dashboard")}
-              className="bg-white text-primary-600 hover:bg-slate-100"
+              className="bg-white text-green-500 hover:bg-gray-100 font-bold shadow-lg hover:shadow-xl transition-all"
             >
               اذهب إلى لوحتي
             </Button>
             <Button
-              variant="ghost"
+              variant="primary"
               size="lg"
               onClick={() => setCurrentPage("timeline")}
-              className="text-white border-2 border-white hover:bg-white/10"
+              className="bg-slate-900 text-white hover:bg-slate-800 font-bold shadow-lg hover:shadow-xl transition-all"
             >
               عرض التايم لاين 📅
             </Button>
