@@ -15,7 +15,7 @@ export default function HomePage({ setCurrentPage, setShowChat }) {
           {/* Left side - Text */}
           <div className="space-y-6 animate-fadeIn">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4">
+              <h1 className="text-5xl md:text-6xl font-bold text-primary-600 dark:text-white mb-4">
                 نور
               </h1>
               <p className="text-2xl font-semibold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
@@ -42,7 +42,7 @@ export default function HomePage({ setCurrentPage, setShowChat }) {
                 variant="outline"
                 size="lg"
                 onClick={() => setShowChat(true)}
-                className="text-base"
+                className="text-base hover:bg-green-500 hover:text-white hover:border-transparent transition-colors"
               >
                 تحدث مع نور 💬
               </Button>
@@ -160,10 +160,10 @@ export default function HomePage({ setCurrentPage, setShowChat }) {
             style={{ animationDelay: "0.2s" }}
           >
             <Button
-              variant="primary"
+              variant="outline"
               size="lg"
               onClick={() => setCurrentPage("dashboard")}
-              className="bg-white text-green-500 hover:bg-gray-100 font-bold shadow-lg hover:shadow-xl transition-all"
+              className="bg-white text-primary-500 hover:bg-primary-500 hover:text-white font-bold shadow-lg hover:shadow-xl transition-all"
             >
               اذهب إلى لوحتي
             </Button>
@@ -171,7 +171,7 @@ export default function HomePage({ setCurrentPage, setShowChat }) {
               variant="primary"
               size="lg"
               onClick={() => setCurrentPage("timeline")}
-              className="bg-slate-900 text-white hover:bg-slate-800 font-bold shadow-lg hover:shadow-xl transition-all"
+              className="bg-primary-500 text-white hover:bg-white hover:text-primary-500 font-bold shadow-lg hover:shadow-xl transition-all"
             >
               عرض التايم لاين 📅
             </Button>
